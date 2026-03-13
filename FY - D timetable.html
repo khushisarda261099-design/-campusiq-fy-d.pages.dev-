@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FY CO-D · CampusIQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#f5f0e8; --cream2:#ede7d9;
+  --dark:#1a1612; --card:#fffdf8;
+  --accent:#c8622a; --accent2:#e8834a;
+  --border:#ddd4c4; --border2:#cec4b2;
+  --text:#2c2620; --muted:#9a8d7e;
+  --sh:0 2px 12px rgba(26,22,18,.08);
+  --shm:0 4px 24px rgba(26,22,18,.13);
+  --shl:0 8px 48px rgba(26,22,18,.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");opacity:.5}
+
+.sidebar{}
+.main{padding-bottom:120px}
+@media(min-width:860px){
+  body{display:grid;grid-template-columns:360px 1fr;min-height:100vh}
+  .sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;padding:28px 20px 28px 28px;border-right:1px solid var(--border)}
+  .main{padding:28px 28px 60px 24px;overflow-y:auto;max-height:100vh}
+  #tabs-mobile{display:none!important}
+}
+@media(max-width:859px){#tabs-desktop{display:none!important}}
+
+/* HERO */
+.hero{background:var(--dark);color:#fff;border-radius:0 0 24px 24px;padding:24px 20px 20px;position:relative;overflow:hidden}
+@media(min-width:860px){.hero{border-radius:20px;padding:28px 24px 22px}}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:220px;height:220px;background:radial-gradient(circle,rgba(200,98,42,.22) 0%,transparent 68%);border-radius:50%;pointer-events:none}
+.brand-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-logo{width:34px;height:34px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:15px;font-weight:700;color:#fff}
+.brand-name{font-family:'DM Serif Display',serif;font-size:17px;line-height:1}
+.brand-div{font-size:11px;color:rgba(255,255,255,.42);letter-spacing:1.8px;text-transform:uppercase;margin-top:2px}
+.live-pill{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:10px;font-weight:600;letter-spacing:.6px;color:rgba(255,255,255,.65)}
+.ldot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.clock{font-family:'JetBrains Mono',monospace;font-size:46px;font-weight:600;letter-spacing:-2px;color:#fff;line-height:1;margin-bottom:3px}
+.cdate{font-size:12px;color:rgba(255,255,255,.35);margin-bottom:18px}
+.now-lbl{font-size:10px;text-transform:uppercase;letter-spacing:2.5px;color:rgba(255,255,255,.3);margin-bottom:6px}
+.now-sub{font-family:'DM Serif Display',serif;font-size:24px;color:#fff;line-height:1.15;margin-bottom:3px}
+.now-det{font-size:12.5px;color:rgba(255,255,255,.46)}
+.now-nxt{font-size:11px;color:rgba(255,255,255,.25);margin-top:6px}
+.ring-row{display:flex;align-items:center;gap:14px;margin-top:18px;background:rgba(255,255,255,.05);border-radius:14px;padding:12px 14px}
+.rsvg{transform:rotate(-90deg);flex-shrink:0}
+.rbg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:4.5}
+.rarc{fill:none;stroke:var(--accent2);stroke-width:4.5;stroke-linecap:round;stroke-dasharray:131.95;stroke-dashoffset:131.95;transition:stroke-dashoffset .6s ease}
+.rpct{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;color:#fff;line-height:1}
+.rsub{font-size:11px;color:rgba(255,255,255,.35);margin-top:2px}
+
+/* TABS */
+.tabs{padding:14px 16px 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+@media(min-width:860px){.tabs{padding:18px 0 0}}
+.tab{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:transparent;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s}
+.tab:hover{border-color:var(--accent);color:var(--accent)}
+.tab.on{background:var(--dark);color:#fff;border-color:var(--dark)}
+
+/* PERIODS */
+.plist{padding:10px 16px 0}
+@media(min-width:860px){.plist{padding:10px 0 0}}
+.sec{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);font-weight:500;margin:14px 0 8px}
+
+/* lecture card */
+.lc{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:15px;background:var(--card);border:1.5px solid var(--border);margin-bottom:7px;box-shadow:var(--sh);transition:transform .15s,box-shadow .15s,opacity .2s;position:relative;overflow:hidden}
+.lc:hover{transform:translateX(3px);box-shadow:var(--shm)}
+.lc.now{border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,98,42,.1),var(--shm)}
+.lc.done{opacity:.32}
+.lc-bar{position:absolute;left:0;top:0;bottom:0;width:3.5px;border-radius:3px 0 0 3px}
+.ldott{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.ltime{min-width:62px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);line-height:1.65;text-align:right;flex-shrink:0}
+.lbody{flex:1;min-width:0}
+.lname{font-size:14px;font-weight:600;line-height:1.25}
+.ldet{font-size:11.5px;color:var(--muted);margin-top:2px}
+.ltag{font-size:10px;font-weight:700;letter-spacing:.4px;padding:3px 9px;border-radius:8px;flex-shrink:0;text-transform:uppercase}
+
+/* practical card */
+.pc{border-radius:15px;background:var(--card);border:1.5px solid var(--border);margin-bottom:7px;box-shadow:var(--sh);overflow:hidden;transition:box-shadow .15s,opacity .2s;position:relative}
+.pc.now{border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,98,42,.1),var(--shm)}
+.pc.done{opacity:.32}
+.pc-bar{position:absolute;left:0;top:0;bottom:0;width:3.5px;border-radius:3px 0 0 3px}
+.pc-head{display:flex;align-items:center;gap:8px;padding:9px 14px 8px;border-bottom:1px solid var(--border)}
+.pc-lbl{font-size:10.5px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
+.pc-time{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-left:auto}
+.batch{display:flex;align-items:center;gap:10px;padding:9px 14px}
+.batch+.batch{border-top:1px dashed var(--border)}
+.bpill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:7px;flex-shrink:0;white-space:nowrap}
+.bbody{flex:1;min-width:0}
+.bsub{font-size:13.5px;font-weight:600;line-height:1.2}
+.bdet{font-size:11.5px;color:var(--muted);margin-top:1px}
+.btag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:7px;flex-shrink:0;text-transform:uppercase}
+
+/* break */
+.brk{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:15px;background:var(--cream2);border:1.5px dashed var(--border2);margin-bottom:7px;opacity:.6}
+
+/* FAB */
+.fab{position:fixed;bottom:26px;right:22px;z-index:100;width:54px;height:54px;border-radius:17px;border:none;background:var(--dark);color:#fff;font-size:22px;cursor:pointer;box-shadow:var(--shl);display:flex;align-items:center;justify-content:center;transition:transform .2s}
+.fab:hover{transform:scale(1.08)}
+@media(min-width:860px){.fab{bottom:96px;right:24px}}
+
+/* CHAT */
+.chat{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--cream);border-top:1.5px solid var(--border);border-radius:26px 26px 0 0;box-shadow:0 -6px 40px rgba(26,22,18,.14);max-height:74vh;display:flex;flex-direction:column;transform:translateY(105%);transition:transform .32s cubic-bezier(.4,0,.2,1)}
+@media(min-width:860px){.chat{left:auto;right:24px;bottom:24px;width:360px;border-radius:22px;border:1.5px solid var(--border);max-height:500px}}
+.chat.open{transform:translateY(0)}
+.ch{padding:18px 18px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
+.ctitle{font-family:'DM Serif Display',serif;font-size:17px}
+.csub{font-size:11px;color:var(--muted);margin-top:1px}
+.cx{width:30px;height:30px;border-radius:9px;border:none;background:var(--cream2);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center}
+.msgs{flex:1;overflow-y:auto;padding:14px 14px 6px;display:flex;flex-direction:column;gap:9px;scroll-behavior:smooth}
+.msg{max-width:84%;padding:10px 13px;border-radius:15px;font-size:13.5px;line-height:1.5}
+.msg.bot{background:var(--card);border:1px solid var(--border);align-self:flex-start;border-radius:4px 15px 15px 15px}
+.msg.usr{background:var(--dark);color:#fff;align-self:flex-end;border-radius:15px 4px 15px 15px}
+.chips{padding:8px 14px;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:6px 11px;border-radius:18px;border:1.5px solid var(--border);background:transparent;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--text);transition:all .15s}
+.chip:hover{background:var(--dark);color:#fff;border-color:var(--dark)}
+.cbar{padding:8px 14px 18px;display:flex;gap:8px;flex-shrink:0}
+@media(min-width:860px){.cbar{padding:8px 14px 14px}}
+.cinp{flex:1;padding:9px 13px;border-radius:13px;border:1.5px solid var(--border);background:var(--card);font-size:13.5px;font-family:'DM Sans',sans-serif;outline:none;color:var(--text);transition:border-color .15s}
+.cinp:focus{border-color:var(--accent)}
+.csnd{width:38px;height:38px;border-radius:11px;border:none;background:var(--dark);color:#fff;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+.csnd:hover{background:var(--accent)}
+
+/* SOCIAL */
+.soc{position:fixed;bottom:22px;left:18px;z-index:50;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.slink{display:flex;align-items:center;gap:6px;text-decoration:none;color:var(--muted);font-size:11px;font-weight:500;padding:5px 10px;border-radius:11px;background:rgba(255,255,255,.72);backdrop-filter:blur(8px);border:1px solid var(--border);transition:all .18s}
+.slink:hover{color:var(--dark);background:#fff}
+.slink svg{width:13px;height:13px;flex-shrink:0}
+.byl{font-size:10px;color:var(--muted);padding:3px 10px;font-style:italic}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="hero">
+    <div class="brand-row">
+      <div class="brand">
+        <div class="brand-logo">IQ</div>
+        <div>
+          <div class="brand-name">CampusIQ</div>
+          <div class="brand-div">FY CO-D · DYP Polytechnic</div>
+        </div>
+      </div>
+      <div class="live-pill"><span class="ldot"></span>LIVE</div>
+    </div>
+    <div class="clock" id="clk">--:--</div>
+    <div class="cdate" id="cdt">—</div>
+    <div class="now-lbl">Right now — CO(D)</div>
+    <div class="now-sub" id="nsub">Loading…</div>
+    <div class="now-det" id="ndet"></div>
+    <div class="now-nxt" id="nnxt"></div>
+    <div class="ring-row">
+      <svg class="rsvg" width="52" height="52" viewBox="0 0 52 52">
+        <circle class="rbg" cx="26" cy="26" r="21"/>
+        <circle class="rarc" cx="26" cy="26" r="21" id="rarc"/>
+      </svg>
+      <div>
+        <div class="rpct" id="rpct">—</div>
+        <div class="rsub" id="rsub">period progress</div>
+      </div>
+    </div>
+  </div>
+  <div class="tabs" id="tabs-desktop"></div>
+</div>
+
+<div class="main">
+  <div class="tabs" id="tabs-mobile"></div>
+  <div class="plist" id="plist"></div>
+</div>
+
+<button class="fab" id="fab">💬</button>
+
+<div class="chat" id="chat">
+  <div class="ch">
+    <div><div class="ctitle">Schedula ✦</div><div class="csub">FY CO-D assistant · always on</div></div>
+    <button class="cx" id="cx">✕</button>
+  </div>
+  <div class="msgs" id="msgs">
+    <div class="msg bot">Hey! I'm Schedula 👋 Your FY CO-D assistant. Ask me anything!</div>
+  </div>
+  <div class="chips">
+    <button class="chip" onclick="qa('Right now?')">Right now?</button>
+    <button class="chip" onclick="qa('Next class')">Next class</button>
+    <button class="chip" onclick="qa('Today full schedule')">Today</button>
+    <button class="chip" onclick="qa('After recess')">After recess</button>
+    <button class="chip" onclick="qa('What time do we end?')">End time</button>
+    <button class="chip" onclick="qa('Free periods today?')">Free slots</button>
+  </div>
+  <div class="cbar">
+    <input class="cinp" id="cinp" placeholder="Ask about your schedule…" autocomplete="off"/>
+    <button class="csnd" id="csnd">↑</button>
+  </div>
+</div>
+
+<div class="soc">
+  <a class="slink" href="https://linkedin.com/in/khushi-sarda-4119723a1" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+    </svg>
+    LinkedIn
+  </a>
+  <div class="byl">built by Khushi Sarda</div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════
+//  FY CO-D — DYP Polytechnic, Akurdi · Sem II 2025-26
+//  Source: screenshot.png — CO(D) row ONLY
+//
+//  Time columns (image header):
+//  09:45–10:45 | 10:45–11:45 | 11:45–12:45 | RECESS | 1:15–2:15 | 2:15–3:15 | 3:15–4:15 | 4:15–5:15
+//  24h: P1=09:45 P2=10:45 P3=11:45 [RECESS 12:45-13:15] P4=13:15 P5=14:15 P6=15:15 P7=16:15
+// ════════════════════════════════════════════════════
+
+const SLOTS = [
+  { i:0, s:'09:45', e:'10:45' },
+  { i:1, s:'10:45', e:'11:45' },
+  { i:2, s:'11:45', e:'12:45' },
+  // RECESS 12:45–13:15
+  { i:3, s:'13:15', e:'14:15' },
+  { i:4, s:'14:15', e:'15:15' },
+  { i:5, s:'15:15', e:'16:15' },
+  { i:6, s:'16:15', e:'17:15' },
+];
+const RECESS = { s:'12:45', e:'13:15' };
+
+const C = {
+  BEE:  { name:'Basic Electrical Engg', col:'#d4a843', ab:'BEE' },
+  AMS:  { name:'Applied Maths',          col:'#c8622a', ab:'AMS' },
+  BLP:  { name:'BLP',                    col:'#3a8f8f', ab:'BLP' },
+  PIC:  { name:'PIC',                    col:'#b54a4a', ab:'PIC' },
+  WPD:  { name:'WPD',                    col:'#6a4a8f', ab:'WPD' },
+  EGM:  { name:'Engg Mechanics',         col:'#8f6a3a', ab:'EGM' },
+  PCO:  { name:'PCO',                    col:'#3a6b8f', ab:'PCO' },
+};
+
+// L = lecture:   { t:'L', k, d }
+// P = practical: { t:'P', d1:{k,d}, d2:{k,d} }   ← occupies 2 slots
+// _ = consumed by previous practical
+// n = null / free
+
+const _ = '_'; // consumed marker
+
+const TT = {
+  //       P1                          P2                              P3                              P4                                              P5                              P6                              P7
+  MON: [
+    {t:'L', k:'BEE', d:'VSY · LH-3'},
+    {t:'L', k:'AMS', d:'PPK · LH-3'},
+    {t:'L', k:'WPD', d:'PSB · LH-3'},
+    {t:'P', d1:{k:'PIC', d:'AAM · Computer Lab'}, d2:{k:'PCO', d:'SHT · Language Lab'}},
+    _,
+    {t:'L', k:'BEE', d:'ANB · LH-4'},
+    {t:'L', k:'PIC', d:'AAM · TUT LH-4'},
+  ],
+
+  TUE: [
+    {t:'L', k:'PIC', d:'AAM · LH-3'},
+    {t:'P', d1:{k:'PIC', d:'AAM · Computer Lab'}, d2:{k:'PCO', d:'SHT · Language Lab'}},
+    _,
+    {t:'L', k:'BLP', d:'NEW · LH-3'},
+    {t:'L', k:'AMS', d:'PPK · LH-3'},
+    {t:'L', k:'AMS', d:'PPK · LH-3'},
+    null,
+  ],
+
+  WED: [
+    {t:'L', k:'PIC', d:'AAM · LH-4'},
+    {t:'L', k:'BLP', d:'NEW · LH-4'},
+    {t:'L', k:'BEE', d:'ANB · LH-4'},
+    {t:'P', d1:{k:'WPD', d:'PSB · Language Lab'}, d2:{k:'BEE', d:'ANB · Electrical Lab'}},
+    _,
+    {t:'P', d1:{k:'PIC', d:'AAM · Computer Lab'}, d2:{k:'BLP', d:'NEW · Computer Lab'}},
+    null,
+  ],
+
+  THU: [
+    {t:'L', k:'PIC', d:'AAM · LH-4'},
+    {t:'P', d1:{k:'PIC', d:'AAM · Computer Lab'}, d2:{k:'BLP', d:'NEW · Computer Lab'}},
+    _,
+    {t:'P', d1:{k:'WPD', d:'DDS · Language Lab'}, d2:{k:'BEE', d:'ANB · Electrical Lab'}},
+    _,
+    {t:'L', k:'AMS', d:'PPK / KDI · LH-8'},
+    null,
+  ],
+
+  FRI: [
+    {t:'L', k:'PIC', d:'AAM · LH-3'},
+    {t:'L', k:'BEE', d:'VSY · LH-3'},
+    {t:'L', k:'WPD', d:'PSB · LH-3'},
+    {t:'P', d1:{k:'BEE', d:'VSY · Electrical Lab'}, d2:{k:'WPD', d:'PSB · Computer Lab'}},
+    _,
+    {t:'P', d1:{k:'WPD', d:'DDS · Language Lab'}, d2:{k:'BEE', d:'ANB · Electrical Lab'}},
+    null,
+  ],
+};
+
+const DAYS=['MON','TUE','WED','THU','FRI'];
+const DLBL={MON:'Monday',TUE:'Tuesday',WED:'Wednesday',THU:'Thursday',FRI:'Friday'};
+const CIRC=131.95;
+const toM=t=>{const[h,m]=t.split(':').map(Number);return h*60+m;};
+const todayKey=()=>{const k=['SUN','MON','TUE','WED','THU','FRI','SAT'][new Date().getDay()];return DAYS.includes(k)?k:'MON';};
+let activeDay=todayKey();
+
+function tick(){
+  const n=new Date();
+  document.getElementById('clk').textContent=`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
+  const WD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('cdt').textContent=`${WD[n.getDay()]}, ${n.getDate()} ${MO[n.getMonth()]} ${n.getFullYear()}`;
+  updateHero();
+}
+const nowM=()=>{const n=new Date();return n.getHours()*60+n.getMinutes();};
+const set=(id,v)=>document.getElementById(id).textContent=v;
+
+function getActive(){
+  const c=nowM(), sc=TT[todayKey()]||[];
+  for(let i=0;i<SLOTS.length;i++){
+    const e=sc[i]; if(!e||e===_) continue;
+    const sl=SLOTS[i];
+    const endSl=(e.t==='P'&&SLOTS[i+1])?SLOTS[i+1].e:sl.e;
+    if(c>=toM(sl.s)&&c<toM(endSl)) return {t:e.t,i,sl,endSl,e,pct:Math.round((c-toM(sl.s))/(toM(endSl)-toM(sl.s))*100)};
+  }
+  if(c>=toM(RECESS.s)&&c<toM(RECESS.e)) return {t:'brk',pct:Math.round((c-toM(RECESS.s))/(toM(RECESS.e)-toM(RECESS.s))*100)};
+  return null;
+}
+function getNext(){
+  const c=nowM(), sc=TT[todayKey()]||[];
+  for(let i=0;i<SLOTS.length;i++){
+    const e=sc[i]; if(!e||e===_) continue;
+    if(toM(SLOTS[i].s)>c) return {i,sl:SLOTS[i],e};
+  }
+  return null;
+}
+function eName(e){
+  if(!e||e===_) return '—';
+  if(e.t==='L') return C[e.k]?.name||e.k;
+  if(e.t==='P') return (C[e.d1.k]?.name||e.d1.k)+' Practical';
+  return '—';
+}
+
+function updateHero(){
+  const ap=getActive(), np=getNext();
+  const arc=document.getElementById('rarc');
+  const ring=p=>{arc.style.strokeDashoffset=CIRC*(1-p/100);set('rpct',p+'%');};
+  if(ap){
+    if(ap.t==='brk'){
+      set('nsub','Recess'); set('ndet','Take a breather ☕');
+      set('nnxt',np?`Next: ${eName(np.e)} at ${np.sl.s}`:'No more classes');
+      ring(ap.pct); set('rsub','break progress');
+    } else {
+      set('nsub',eName(ap.e));
+      set('ndet',ap.sl.s+'–'+ap.endSl+(ap.t==='P'?' · D1 / D2 Batch':''));
+      set('nnxt',np?`Next: ${eName(np.e)} at ${np.sl.s}`:'Last class ✓');
+      ring(ap.pct); set('rsub','period progress');
+    }
+  } else {
+    const c=nowM();
+    if(c<toM('09:45')){set('nsub','Classes start at 9:45');set('ndet','Get ready! 🎒');set('nnxt','');}
+    else{set('nsub','Day complete 🎉');set('ndet','All classes done');set('nnxt','');}
+    arc.style.strokeDashoffset=CIRC; set('rpct','—'); set('rsub','no active class');
+  }
+}
+
+function renderTabs(){
+  const html=DAYS.map(d=>`<button class="tab${d===activeDay?' on':''}" onclick="setDay('${d}')">${d}</button>`).join('');
+  document.getElementById('tabs-mobile').innerHTML=html;
+  document.getElementById('tabs-desktop').innerHTML=html;
+}
+function setDay(d){activeDay=d;renderTabs();renderPeriods();}
+
+function renderPeriods(){
+  const sc=TT[activeDay]||[];
+  const isToday=activeDay===todayKey();
+  const c=nowM();
+  let h=`<div class="sec">${DLBL[activeDay]} — FY CO-D</div>`;
+
+  for(let i=0;i<SLOTS.length;i++){
+    const e=sc[i];
+    if(i===3) h+=`<div class="brk"><span style="font-size:18px">☕</span><div style="margin-left:4px"><div style="font-size:13px;font-weight:500;color:var(--muted)">Recess</div><div style="font-size:11px;color:var(--muted)">${RECESS.s} – ${RECESS.e}</div></div></div>`;
+    if(!e||e===_) continue;
+
+    if(e.t==='L'){
+      const s=C[e.k]||{name:e.k,col:'#888',ab:e.k};
+      const sl=SLOTS[i];
+      const cur=isToday&&c>=toM(sl.s)&&c<toM(sl.e);
+      const done=isToday&&c>=toM(sl.e);
+      h+=`<div class="lc${cur?' now':''}${done?' done':''}">
+        <div class="lc-bar" style="background:${s.col}"></div>
+        <div class="ldott" style="background:${s.col}"></div>
+        <div class="ltime">${sl.s}<br>${sl.e}</div>
+        <div class="lbody"><div class="lname">${s.name}</div><div class="ldet">${e.d}</div></div>
+        <div class="ltag" style="background:${s.col}22;color:${s.col}">${s.ab}</div>
+      </div>`;
+    } else if(e.t==='P'){
+      const sl=SLOTS[i];
+      const endSl=(SLOTS[i+1])?SLOTS[i+1].e:sl.e;
+      const cur=isToday&&c>=toM(sl.s)&&c<toM(endSl);
+      const done=isToday&&c>=toM(endSl);
+      const s1=C[e.d1.k]||{name:e.d1.k,col:'#888',ab:e.d1.k};
+      const s2=C[e.d2.k]||{name:e.d2.k,col:'#888',ab:e.d2.k};
+      h+=`<div class="pc${cur?' now':''}${done?' done':''}">
+        <div class="pc-bar" style="background:${s1.col}"></div>
+        <div class="pc-head">
+          <span style="font-size:13px">🔬</span>
+          <span class="pc-lbl">Practical</span>
+          <span class="pc-time">${sl.s} – ${endSl}</span>
+        </div>
+        <div class="batch">
+          <div class="bpill" style="background:${s1.col}22;color:${s1.col}">D1</div>
+          <div class="bbody"><div class="bsub">${s1.name}</div><div class="bdet">${e.d1.d}</div></div>
+          <div class="btag" style="background:${s1.col}22;color:${s1.col}">${s1.ab}</div>
+        </div>
+        <div class="batch">
+          <div class="bpill" style="background:${s2.col}22;color:${s2.col}">D2</div>
+          <div class="bbody"><div class="bsub">${s2.name}</div><div class="bdet">${e.d2.d}</div></div>
+          <div class="btag" style="background:${s2.col}22;color:${s2.col}">${s2.ab}</div>
+        </div>
+      </div>`;
+    }
+  }
+  document.getElementById('plist').innerHTML=h;
+}
+
+// CHAT
+document.getElementById('fab').onclick=()=>toggleChat(true);
+document.getElementById('cx').onclick=()=>toggleChat(false);
+document.getElementById('csnd').onclick=send;
+document.getElementById('cinp').addEventListener('keydown',e=>{if(e.key==='Enter')send();});
+function toggleChat(o){document.getElementById('chat').classList.toggle('open',o);}
+function qa(q){document.getElementById('cinp').value=q;send();}
+function send(){
+  const inp=document.getElementById('cinp'),q=inp.value.trim();if(!q)return;
+  inp.value='';addMsg(q,'usr');setTimeout(()=>addMsg(schedula(q),'bot'),300);
+}
+function addMsg(t,w){
+  const el=document.createElement('div');el.className=`msg ${w}`;el.textContent=t;
+  const b=document.getElementById('msgs');b.appendChild(el);b.scrollTop=b.scrollHeight;
+}
+function schedula(q){
+  const qq=q.toLowerCase(),day=todayKey(),sc=TT[day]||[];
+  const ap=getActive(),np=getNext();
+  if(/\bnow\b|current|going on/.test(qq)){
+    if(!ap)return nowM()<toM('09:45')?'Classes haven\'t started — first at 9:45!':'All done today! 🎉';
+    if(ap.t==='brk')return `Recess right now (${RECESS.s}–${RECESS.e}). ${ap.pct}% through.`;
+    return `Right now: ${eName(ap.e)} (${ap.sl.s}–${ap.endSl}). ${ap.pct}% done.`;
+  }
+  if(/next/.test(qq)){if(!np)return 'No more classes today 🎉';return `Next: ${eName(np.e)} at ${np.sl.s}.`;}
+  if(/after recess|afternoon/.test(qq)){
+    const it=sc.slice(3).map((e,i)=>(e&&e!==_)?`${SLOTS[3+i].s} ${eName(e)}`:null).filter(Boolean);
+    return it.length?`After recess: ${it.join(' → ')}`:'Nothing after recess!';
+  }
+  if(/today|full|schedule|all/.test(qq)){
+    const it=sc.map((e,i)=>(e&&e!==_)?`${SLOTS[i].s} ${eName(e)}`:null).filter(Boolean);
+    return it.length?`${DLBL[day]}: ${it.join(' → ')}`:'Nothing today!';
+  }
+  if(/end|finish|last/.test(qq)){
+    const last=sc.map((e,i)=>(e&&e!==_)?i:-1).filter(x=>x>=0).pop();
+    return last!=null?`Last class ends at ${SLOTS[last].e}.`:'Nothing today.';
+  }
+  if(/free|no class/.test(qq)){
+    const free=SLOTS.filter((_,i)=>{const e=sc[i];return !e||e===null;});
+    return free.length?`Free slots: ${free.map(s=>s.s).join(', ')}`:'Full day!';
+  }
+  for(const[k,v]of Object.entries(DLBL)){
+    if(qq.includes(v.toLowerCase())){
+      const ds=TT[k]||[];
+      const it=ds.map((e,i)=>(e&&e!==_)?`${SLOTS[i].s} ${eName(e)}`:null).filter(Boolean);
+      return it.length?`${v}: ${it.join(' → ')}`:`Nothing on ${v}.`;
+    }
+  }
+  for(const[k,v]of Object.entries(C)){
+    if(qq.includes(v.name.toLowerCase())||qq.includes(k.toLowerCase())){
+      const hits=[];
+      for(const[dk,ds]of Object.entries(TT))
+        ds.forEach((e,i)=>{
+          if(!e||e===_)return;
+          if(e.t==='L'&&e.k===k)hits.push(`${DLBL[dk]} ${SLOTS[i].s}`);
+          if(e.t==='P'&&(e.d1.k===k||e.d2.k===k))hits.push(`${DLBL[dk]} ${SLOTS[i].s} (practical)`);
+        });
+      return hits.length?`${v.name}: ${hits.join(', ')}.`:'Not found in CO-D timetable.';
+    }
+  }
+  if(/^(hi|hello|hey)/.test(qq))return "Hey! 👋 Ask: current class, next class, today's schedule, end time, or a subject name!";
+  return "Ask me: current class, next class, today, end time, free slots, or any subject!";
+}
+
+renderTabs();
+renderPeriods();
+tick();
+setInterval(tick,15000);
+</script>
+</body>
+</html>
